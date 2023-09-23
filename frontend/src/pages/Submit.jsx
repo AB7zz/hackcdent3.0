@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useStateContext } from '../context/StateContext';
 
 function Submit() {
   const [_loc, setLoc] = useState('')
@@ -6,6 +7,7 @@ function Submit() {
   const [_date, setDate] = useState('')
   const [_plate, setPlate] = useState('')
   const [_snapShot, setImage] = useState(null)
+  const {address} = useStateContext()
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -15,9 +17,10 @@ function Submit() {
   const handleSubmit = async(e) => {
     try {
       e.preventDefault();
-      const result = await axios.post('http://172.18.100.166:3000/userAddsAccident', {_loc, _time, _date, _plate, _snapShot})
+      const result = await axios.post('http://172.18.100.166:3000/userAddsAccident', {_loc, _time, _date, _plate, _snapShot, _user: address})
       if(result){
-        console.log('userAddsAccident successful')
+        window.alert('Accident submitted successfully')
+        window.location.reload()
       }
       // Handle form submission with selectedFile and other form data.
     } catch (error) {
@@ -27,7 +30,7 @@ function Submit() {
 
   return (
     
-    <div className='mt-10 mb-10' style={{ width: '529px', marginTop: '122px', marginLeft: '-205px' }}>
+    <div className='mt-10 mb-10' style={{ width: '529px', marginTop: '122px' }}>
       <h1 className='font-bold text-xl'>Submit Accident</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-6">

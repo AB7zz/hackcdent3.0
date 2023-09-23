@@ -1,55 +1,77 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
+
+
 
 function ChatApp() {
-    const [messages, setMessages] = useState([
-        {
-          text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-          sender: 'user',
-          timestamp: '2 min ago',
-        },
-        {
-          text: 'Hi there!',
-          sender: 'other',
-          timestamp: '1 min ago',
-        },
-        {
-          text: 'How are you doing today?',
-          sender: 'other',
-          timestamp: '1 min ago',
-        },
-        {
-          text: 'Im doing great, thanks!',
-          sender: 'user',
-          timestamp: 'Just now',
-        },
-        {
-          text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-          sender: 'user',
-          timestamp: 'Just now',
-        },
-        {
-          text: 'That sounds good!',
-          sender: 'other',
-          timestamp: 'Just now',
-        },
-        // Add more messages here
-      ]);
-      ;
+    const [messages, setMessages] = useState([])
+    
+    // const configuration = new Configuration({
+    //     apiKey: process.env.OPENAI_API_KEY,
+    // });
+    // const openai = new OpenAIApi(configuration);
+    // const openaiClient = new openai.OpenAIApi({
+    //     apiKey: "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",
+    //   });
+    
+    // const openai = new OpenAI({
+    //     apiKey: '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',
+    //     dangerouslyAllowBrowser: true,
+    //   });
+    // //   const openai = new OpenAIApi(configuration);
+    useEffect(() => {
+      console.log('Messages:', messages);
+    }, [messages]);
 
-  const handleMessageSubmit = (messageText) => {
-    const newMessage = {
-      text: messageText,
-      sender: 'user', // You can set sender as 'user' or 'other' as needed
-      timestamp: 'Just now', // You can set the appropriate timestamp here
+    const handleMessageSubmit = async (messageText) => {
+      try {
+        const newMessage = {
+          text: messageText,
+          sender: 'user',
+          timestamp: 'Just now',
+        };
+        const updatedMessages = [...messages, newMessage];
+    
+        // Add the user's message to the state first
+        setMessages(updatedMessages);
+    
+        const apiUrl = 'http://172.18.100.166:3000/bot';
+    
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ message: messageText }),
+        });
+    
+        if (response.ok) {
+          // Get the response data
+          const responseData = await response.json();
+          // Create a message from the response
+          const responseMessage = {
+            text: responseData.output,
+            sender: 'server', // You can use 'server' or another identifier
+            timestamp: 'Just now',
+          };
+    
+          // Add the server's response message to the state using the updatedMessages variable
+          const updatedMessagesWithResponse = [...updatedMessages, responseMessage];
+          setMessages(updatedMessagesWithResponse);
+          console.log(updatedMessagesWithResponse);
+        } else {
+          console.error('Error sending message to backend.');
+        }
+      } catch (error) {
+        console.error('Error making API request:', error);
+      }
     };
-    setMessages([...messages, newMessage]);
-  };
+    
 
   return (
     <div className="flex flex-col  h-full w-full bg-white shadow-xl rounded-lg border border-gray-300">
       {/* Display messages here */}
       <div className="flex flex-col flex-grow h-0 p-4 overflow-y-auto">
-        {messages.map((message, index) => (
+        {messages && messages.map((message, index) => (
           <div
             key={index}
             className={`flex w-full mt-2 space-x-3 max-w-xs ${
@@ -88,7 +110,7 @@ function ChatApp() {
         />
       </div>
     </div>
-  );
-}
+  )
+        }
 
 export default ChatApp;

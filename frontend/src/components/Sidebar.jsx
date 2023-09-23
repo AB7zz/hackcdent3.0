@@ -1,12 +1,10 @@
 import React,{useState} from 'react'
+import { useStateContext } from '../context/StateContext'
 
 
 function Sidebar() {
 
-    const [wallet,setWallet] = useState(false)
-    const onWalletClick =()=>{
-        setWallet(!wallet)
-    }
+    const {connect, address} = useStateContext()
 
   return (
    <>
@@ -30,21 +28,13 @@ function Sidebar() {
               <button type="button" className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
                 {/* <span className="sr-only">Open user menu</span> */}
                 {
-                  wallet ? 
-                <img className="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo"/>
-                : <button className='bg-gray-200 text-black font-semibold p-3 rounded-lg' onClick={onWalletClick}>Connect to wallet</button>
+                  address ? 
+                  <button className='bg-gray-200 text-black font-semibold p-3 rounded-lg'>{address}</button>
+                : <button className='bg-gray-200 text-black font-semibold p-3 rounded-lg' onClick={() => connect()}>Connect to wallet</button>
                 }
               </button>
             </div>
             <div className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
-              <div className="px-4 py-3" role="none">
-                <p className="text-sm text-gray-900 dark:text-white" role="none">
-                  ABC BOY
-                </p>
-                <p className="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
-                  abcboy@gmail.com
-                </p>
-              </div>
               <ul className="py-1" role="none">
                 <li>
                   <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Dashboard</a>
