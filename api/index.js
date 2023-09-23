@@ -54,7 +54,7 @@ app.post("/userAddsAccident", async (req, res) => {
 
     const contract = await sdk.getContract(process.env.CONTRACT_ADDRESS);
 
-    const result = await contract.call("userAddsAccident", [_loc, _date, _time, _snapShot, _plate, _user]);
+    const result = await contract.call("userAddsAccident", [_loc, _date, _time, _snapShot, _plate]);
 
     console.log(result)
 
@@ -99,6 +99,19 @@ app.get('/getBlockData/:block', async(req, res) => {
     }catch(error){
         console.log(error)
     }
+})
+
+app.post('/reqInsurance', async(req, res) => {
+  try{
+    const {_name, _phone, _block, _user} = req.body
+    const contract = await sdk.getContract(process.env.CONTRACT_ADDRESS)
+    const result = await contract.call("reqInsurance", [_name, _phone, _block])
+
+
+        console.log(result)
+  }catch(error){
+    console.log(error)
+  }
 })
 
 app.listen(port, '172.18.100.166', () => {
