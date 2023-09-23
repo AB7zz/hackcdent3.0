@@ -1,16 +1,28 @@
 import React, { useState } from 'react';
 
 function Submit() {
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [_loc, setLoc] = useState('')
+  const [_time, setTime] = useState('')
+  const [_date, setDate] = useState('')
+  const [_plate, setPlate] = useState('')
+  const [_snapShot, setImage] = useState(null)
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    setSelectedFile(file);
+    setImage(file);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission with selectedFile and other form data.
+  const handleSubmit = async(e) => {
+    try {
+      e.preventDefault();
+      const result = await axios.post('http://172.18.100.166:3000/userAddsAccident', {_loc, _time, _date, _plate, _snapShot})
+      if(result){
+        console.log('userAddsAccident successful')
+      }
+      // Handle form submission with selectedFile and other form data.
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   return (
@@ -21,6 +33,7 @@ function Submit() {
         <div className="mb-6">
           <label htmlFor="Location" className="block mb-2 text-sm font-medium text-gray-900">Location *</label>
           <input
+            onChange={e => setLoc(e.target.value)}
             type="text"
             id="location"
             className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -30,8 +43,29 @@ function Submit() {
         <div className="mb-6">
           <label htmlFor="Time" className="block mb-2 text-sm font-medium text-gray-900">Time *</label>
           <input
-            type="text"
+            onChange={e => setTime(e.target.value)}
+            type="time"
             id="time"
+            className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            required
+          />
+        </div>
+        <div className="mb-6">
+          <label htmlFor="Time" className="block mb-2 text-sm font-medium text-gray-900">Date *</label>
+          <input
+            onChange={e => setDate(e.target.value)}
+            type="date"
+            id="date"
+            className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            required
+          />
+        </div>
+        <div className="mb-6">
+          <label htmlFor="Time" className="block mb-2 text-sm font-medium text-gray-900">Plate No.</label>
+          <input
+            onChange={e => setPlate(e.target.value)}
+            type="text"
+            id="plate"
             className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
             required
           />

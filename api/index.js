@@ -45,6 +45,27 @@ app.post("/addAccident", async (req, res) => {
   }
 });
 
+
+app.post("/userAddsAccident", async (req, res) => {
+  try {
+    const { _loc, _date, _time, _snapShot, _plate, _user } = req.body;
+
+    // console.log(_loc, _date, _time, _snapShot, _plate, _user)
+
+    const contract = await sdk.getContract(process.env.CONTRACT_ADDRESS);
+
+    const result = await contract.call("userAddsAccident", [_loc, _date, _time, _snapShot, _plate, _user]);
+
+    console.log(result)
+
+
+    res.json({ success: true, result });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 app.get('/getAccidents', async (req, res) => {
     try {
         const contract = await sdk.getContract(process.env.CONTRACT_ADDRESS)
