@@ -11,7 +11,7 @@ function Submit() {
     const file = e.target.files[0];
     setImage(file);
   };
-
+// HackCDent3.0
   const handleSubmit = async(e) => {
     try {
       e.preventDefault();
