@@ -171,6 +171,17 @@ app.post('/bot', async (req, res) => {
       res.status(500).json({ error: 'Internal server error' }); 
     }
   });
+  app.post('/submitacc', (req, res) => {
+    try {
+        const { image, location } = req.body;
+    //   console.log("location",location)
+        // console.log("img",image)
+      res.status(200).json({ message: 'Image and location data received successfully.' });
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ error: 'Internal server error.' });
+    }
+  })
 
 app.listen(port, () => {
     console.log(`Server is running on port http://172.18.100.166:${port}`);
