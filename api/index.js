@@ -71,6 +71,14 @@ app.post("/userAddsAccident", async (req, res) => {
   }
 });
 
+app.get('/getUserAccidents/:user', async (req, res) => {
+  try {
+    
+  } catch (error) {
+    console.log(error)
+  }
+})
+
 app.get('/getAccidents', async (req, res) => {
     try {
         const contract = await sdk.getContract(process.env.CONTRACT_ADDRESS)
@@ -119,13 +127,15 @@ app.post('/reqInsurance', async(req, res) => {
   }
 })
 
+
+
 //--------- ----Dheeraj
 app.post('/bot', async (req, res) => {
     try {
       const userMessage = req.body.message;
-        console.log("userMessage",userMessage)
+      console.log("userMessage",userMessage)
       const configuration = new Configuration({
-        apiKey: "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",
+        apiKey: process.env.CHAT_GPT_API,
       });
   
       const openai = new OpenAIApi(configuration);
