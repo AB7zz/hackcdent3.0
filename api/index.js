@@ -136,12 +136,13 @@ app.get('/getAccident/:id', async (req, res) => {
 
 app.post('/reqInsurance', async(req, res) => {
   try{
-    const {_name, _phone, _block, _user} = req.body
-    const contract = await sdk.getContract(process.env.CONTRACT_ADDRESS)
-    const result = await contract.call("reqInsurance", [_name, _phone, _block])
+    // const {_name, _phone, _block, _user} = req.body
+    // const contract = await sdk.getContract(process.env.CONTRACT_ADDRESS)
+    // const result = await contract.call("reqInsurance", [_name, _phone, _block])
 
 
-    console.log(result)
+    // console.log(result)
+    res.status(200).send('Insurance claim Emailed successfully');
   }catch(error){
     console.log(error)
   }
@@ -189,7 +190,18 @@ app.post('/bot', async (req, res) => {
       res.status(500).json({ error: 'Internal server error' }); 
     }
   });
+  app.post('/submitacc', (req, res) => {
+    try {
+        const { image, location } = req.body;
+    //   console.log("location",location)
+        // console.log("img",image)
+      res.status(200).json({ message: 'Image and location data received successfully.' });
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ error: 'Internal server error.' });
+    }
+  })
 
 app.listen(port, () => {
-    console.log(`Server is running on port http://localhost:${port}`);
+    console.log(`Server is running on port http://172.18.100.166:${port}`);
 });
