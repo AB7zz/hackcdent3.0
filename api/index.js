@@ -3,11 +3,16 @@ import bodyParser from 'body-parser'
 import {ThirdwebSDK} from '@thirdweb-dev/sdk'
 import dotenv from 'dotenv'
 import ethers from "ethers";
+// import { configuration, OpenAIApi } from 'openai'
+import { Configuration, OpenAIApi } from "openai";
+// const { Configuration, OpenAIApi } = require("openai");
+import cors from 'cors'
 
 dotenv.config()
 
 const app = express();
 const port = process.env.PORT || 3000;
+app.use(cors())
 
 app.use(bodyParser.json());
 
@@ -100,7 +105,34 @@ app.get('/getBlockData/:block', async(req, res) => {
         console.log(error)
     }
 })
+//--------- ----Dheeraj
+app.post('/bot', async (req, res) => {
+    try {
+      const userMessage = req.body.message;
+        console.log("userMessage",userMessage)
+      const configuration = new Configuration({
+        apiKey: "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",
+      });
+  
+      const openai = new OpenAIApi(configuration);
+      const prompt =`"Hello, I need legal assistance related to the Indian Penal Code (IPC) and other Indian laws. My problem is ${userMessage}. Can you provide me with guidance or information on how to approach this situation within the boundaries of Indian law?"`
+      const completion = await openai.createCompletion({
+        model: "text-davinci-003",
+        prompt: userMessage, 
+        temperature: 0,
+        max_tokens: 2048,
+      });
+      const output = completion.data.choices[0].text.trim()
+      console.log(output);
+      
+      // Send
+      res.json({ output }); 
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal server error' }); 
+    }
+  });
 
-app.listen(port, '172.18.100.166', () => {
-    console.log(`Server is running on port http://172.18.100.166:${port}`);
+app.listen(port, () => {
+    console.log(`Server is running on port http://localhost:${port}`);
 });
