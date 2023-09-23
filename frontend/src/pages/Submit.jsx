@@ -9,9 +9,25 @@ function Submit() {
   const [_snapShot, setImage] = useState(null)
   const {address} = useStateContext()
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async(e) => {
     const file = e.target.files[0];
-    setImage(file);
+    console.log(file)
+    const base64EncodedImage = await encodeImageFileToBase64(file);
+    console.log(base64EncodedImage)
+    setImage(base64EncodedImage);
+  };
+
+  const encodeImageFileToBase64 = async (file) => {
+    const reader = new FileReader();
+    return new Promise((resolve, reject) => {
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+      reader.onerror = (error) => {
+        reject(error);
+      };
+      reader.readAsDataURL(file);
+    });
   };
 
   const handleSubmit = async(e) => {

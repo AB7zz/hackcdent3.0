@@ -34,13 +34,13 @@ app.post("/addAccident", async (req, res) => {
   try {
     const { _loc, _date, _time, _snapShot, _plate } = req.body;
 
-    // console.log(_loc, _date, _time, _snapShot, _plate)
+    console.log(_loc, _date, _time, _snapShot, _plate)
 
-    const contract = await sdk.getContract(process.env.CONTRACT_ADDRESS);
+    // const contract = await sdk.getContract(process.env.CONTRACT_ADDRESS);
 
-    const result = await contract.call("addAccident", [_loc, _date, _time, _snapShot, _plate]);
+    // const result = await contract.call("addAccident", [_loc, _date, _time, _snapShot, _plate]);
 
-    console.log(result)
+    // console.log(result)
 
 
     res.json({ success: true, result });
@@ -53,7 +53,10 @@ app.post("/addAccident", async (req, res) => {
 
 app.post("/userAddsAccident", async (req, res) => {
   try {
-    const { _loc, _date, _time, _snapShot, _plate, _user } = req.body;
+    const sdk = new ThirdwebSDK("mumbai", {
+      secretKey: process.env.SECRET_KEY
+    });
+    const { _loc, _date, _time, _snapShot, _plate } = req.body;
 
     // console.log(_loc, _date, _time, _snapShot, _plate, _user)
 
@@ -106,7 +109,6 @@ app.get('/getAccident/:id', async (req, res) => {
         const result = await contract.call("getAccident", [req.params.id])
 
         console.log(result)
-
         res.json({success: true, result})
     } catch (error) {
         console.log(error)
@@ -115,6 +117,9 @@ app.get('/getAccident/:id', async (req, res) => {
 
 app.post('/reqInsurance', async(req, res) => {
   try{
+    const sdk = new ThirdwebSDK("mumbai", {
+      secretKey: process.env.SECRET_KEY
+    });
     const {_name, _phone, _block, _user} = req.body
     const contract = await sdk.getContract(process.env.CONTRACT_ADDRESS)
     const result = await contract.call("reqInsurance", [_name, _phone, _block])
@@ -169,6 +174,6 @@ app.post('/bot', async (req, res) => {
     }
   });
 
-app.listen(port, '172.18.100.166', () => {
-    console.log(`Server is running on port http://172.18.100.166:${port}`);
+app.listen(port, () => {
+    console.log(`Server is running on port http://localhost:${port}`);
 });
