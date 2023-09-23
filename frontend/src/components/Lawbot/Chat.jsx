@@ -46,7 +46,7 @@ function ChatApp() {
   };
 
   return (
-    <div className="flex flex-col  h-full w-full bg-white shadow-xl rounded-lg ">
+    <div className="flex flex-col  h-full w-full bg-white shadow-xl rounded-lg border border-gray-300">
       {/* Display messages here */}
       <div className="flex flex-col flex-grow h-0 p-4 overflow-y-auto">
         {messages.map((message, index) => (
