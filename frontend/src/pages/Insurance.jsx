@@ -2,7 +2,9 @@ import React from 'react';
 
 function Insurance() {
   return (
+    
     <div className='mt-10 mb-10' style={{ width: '529px', marginTop: '122px', marginLeft:'-205px' }}>
+       <h1 className='font-bold text-xl'>Submit Insurance</h1>
       <form>
         <div className="mb-6">
           <label htmlFor="Name" className="block mb-2 text-sm font-medium text-gray-900 ">Name *</label>
