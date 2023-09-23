@@ -7,8 +7,6 @@ export const StateContextProvider = ({children}) => {
     const address = useAddress()
     const connect = useMetamask()
 
-    
-
     return(
         <StateContext.Provider value={{
             connect,
