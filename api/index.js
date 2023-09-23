@@ -71,9 +71,17 @@ app.post("/userAddsAccident", async (req, res) => {
   }
 });
 
-app.get('/getUserAccidents/:user', async (req, res) => {
+app.get('/getUserAccidents', async (req, res) => {
   try {
-    
+    const contract = await sdk.getContract(process.env.CONTRACT_ADDRESS);
+
+    const result = await contract.call("getUserAccidents");
+
+    console.log(result)
+
+
+    res.json({ success: true, result });
+
   } catch (error) {
     console.log(error)
   }
@@ -105,15 +113,6 @@ app.get('/getAccident/:id', async (req, res) => {
     }
 })
 
-app.get('/getBlockData/:block', async(req, res) => {
-    try{
-        const contract = await sdk.getContract(process.env.CONTRACT_ADDRESS)
-
-    }catch(error){
-        console.log(error)
-    }
-})
-
 app.post('/reqInsurance', async(req, res) => {
   try{
     const {_name, _phone, _block, _user} = req.body
@@ -121,8 +120,21 @@ app.post('/reqInsurance', async(req, res) => {
     const result = await contract.call("reqInsurance", [_name, _phone, _block])
 
 
-        console.log(result)
+    console.log(result)
   }catch(error){
+    console.log(error)
+  }
+})
+
+app.get('/getInsurance/:block', async(req, res) => {
+  try {
+    const contract = await sdk.getContract(process.env.CONTRACT_ADDRESS)
+    const result = await contract.call("getInsurance", [req.params.block])
+
+    console.log(result)
+
+    res.json({success: true, result})
+  } catch (error) {
     console.log(error)
   }
 })
