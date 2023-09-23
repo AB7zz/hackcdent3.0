@@ -3,9 +3,8 @@ import bodyParser from 'body-parser'
 import {ThirdwebSDK} from '@thirdweb-dev/sdk'
 import dotenv from 'dotenv'
 import ethers from "ethers";
-// import { configuration, OpenAIApi } from 'openai'
 import { Configuration, OpenAIApi } from "openai";
-// const { Configuration, OpenAIApi } = require("openai");
+import * as IPFS from 'ipfs-core'
 import cors from 'cors'
 
 dotenv.config()
@@ -22,6 +21,9 @@ const sdk = ThirdwebSDK.fromPrivateKey(`0x${process.env.PRIVATE_KEY}`, "mumbai",
     secretKey: process.env.SECRET_KEY
   });
 
+const ipfs = await IPFS.create()
+const { cid } = await ipfs.add('Hello world')
+console.info(cid)
 // const sdk = new ThirdwebSDK("mumbai", {
 //   secretKey: process.env.SECRET_KEY
 // });
@@ -174,6 +176,6 @@ app.post('/bot', async (req, res) => {
     }
   });
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
     console.log(`Server is running on port http://localhost:${port}`);
 });
