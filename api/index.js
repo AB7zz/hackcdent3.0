@@ -3,11 +3,11 @@ import bodyParser from 'body-parser'
 import {ThirdwebSDK} from '@thirdweb-dev/sdk'
 import dotenv from 'dotenv'
 import ethers from "ethers";
-// import { configuration, OpenAIApi } from 'openai'
 import { Configuration, OpenAIApi } from "openai";
-// const { Configuration, OpenAIApi } = require("openai");
+import * as IPFS from 'ipfs-core'
 import cors from 'cors'
-
+import { createHelia } from 'helia'
+import { json } from '@helia/json'
 
 dotenv.config()
 
@@ -18,34 +18,35 @@ app.use(cors())
 
 app.use(bodyParser.json());
 
-const signer = new ethers.Wallet(`0x${process.env.PRIVATE_KEY}`);
+
 
 const sdk = ThirdwebSDK.fromPrivateKey(`0x${process.env.PRIVATE_KEY}`, "mumbai", {
-    secretKey: process.env.SECRET_KEY
-  });
+  secretKey: process.env.SECRET_KEY
+});
 
-// const sdk = new ThirdwebSDK("mumbai", {
-//   secretKey: process.env.SECRET_KEY
-// });
+const helia = await createHelia()
+const j = json(helia)
 
 app.get('/', async(req, res) => {
-    res.send('Hello World')
+  res.send('Hello World')
 })
 
 app.post("/addAccident", async (req, res) => {
   try {
-    const { _loc, _date, _time, _snapShot, _plate } = req.body;
+    const { _loc, _date, _time, snapShot, _plate } = req.body;
+    const _snapShot = await j.add({ base64: snapShot })
+    // const text = await j.get(_snapShot)
+    console.log(toString(_snapShot))
+      
+      
+  // const contract = await sdk.getContract(process.env.CONTRACT_ADDRESS);
 
-    console.log(_loc, _date, _time, _plate)
+  // const result = await contract.call("addAccident", [_loc, _date, _time, _snapShot, _plate]);
 
-    const contract = await sdk.getContract(process.env.CONTRACT_ADDRESS);
-
-    const result = await contract.call("addAccident", [_loc, _date, _time, _snapShot, _plate]);
-
-    console.log(result)
+  // console.log(result)
 
 
-    res.json({ success: true, result });
+    res.json({ success: true });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, error: error.message });
@@ -94,9 +95,19 @@ app.get('/getAccidents', async (req, res) => {
         const contract = await sdk.getContract(process.env.CONTRACT_ADDRESS)
         const result = await contract.call("getAccidents")
 
-        console.log(result)
 
-        res.json({success: true, result})
+        const arrayofMaps = result.map((innerArray) => {
+          const map = {};
+          map['loc'] = innerArray[0]
+          map['date'] = innerArray[1]
+          map['time'] = innerArray[2]
+          map['snapShot'] = innerArray[3]
+          map['snapShot'] = innerArray[4]
+          return map;
+        });
+
+        console.log(arrayofMaps)
+        res.json({success: true, result: arrayofMaps})
     } catch (error) {
         console.log(error)
     }
@@ -107,9 +118,17 @@ app.get('/getAccident/:id', async (req, res) => {
         const contract = await sdk.getContract(process.env.CONTRACT_ADDRESS)
         const result = await contract.call("getAccident", [req.params.id])
 
-        console.log(result)
 
-        res.json({success: true, result})
+          const arrayOfMap = {};
+          arrayOfMap['loc'] = result[0]
+          arrayOfMap['date'] = result[1]
+          arrayOfMap['time'] = result[2]
+          arrayOfMap['snapShot'] = result[3]
+          arrayOfMap['snapShot'] = result[4]
+
+          console.log(arrayOfMap)
+
+        res.json({success: true, result: arrayOfMap})
     } catch (error) {
         console.log(error)
     }
