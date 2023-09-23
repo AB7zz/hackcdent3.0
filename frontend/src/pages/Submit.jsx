@@ -57,11 +57,12 @@ function Submit() {
     console.log("submit clicked")
     if (capturedImage && capturedLocation) {
       const dataToSend = {
-        image: capturedImage,
-        location: capturedLocation, 
+        snapShot: capturedImage,
+        _loc: capturedLocation, 
+        _user: address
       };
       // console.log(formData)
-      fetch('http://localhost:3000/submitacc', {
+      fetch('http://localhost:3000/userAddsAccident', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -56,13 +56,13 @@ app.post("/addAccident", async (req, res) => {
 
 app.post("/userAddsAccident", async (req, res) => {
   try {
-    const { _loc, _date, _time, _snapShot, _plate, _user } = req.body;
-
+    const { snapShot, _loc, _user } = req.body;
+    const _snapShot = await j.add({ base64: snapShot })
     // console.log(_loc, _date, _time, _snapShot, _plate, _user)
 
     const contract = await sdk.getContract(process.env.CONTRACT_ADDRESS);
 
-    const result = await contract.call("userAddsAccident", [_loc, _date, _time, _snapShot, _plate]);
+    const result = await contract.call("userAddsAccident", [_snapShot, _loc]);
 
     console.log(result)
 
