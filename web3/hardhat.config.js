@@ -19,7 +19,7 @@ module.exports = {
     zksync_testnet: {
       url: "https://zksync2-testnet.zksync.dev",
       ethNetwork: "goerli",
-      chainId: 280,
+      chainId: 5,
       zksync: true,
     },
     zksync_mainnet: {
