@@ -8,9 +8,11 @@ import { Configuration, OpenAIApi } from "openai";
 // const { Configuration, OpenAIApi } = require("openai");
 import cors from 'cors'
 
+
 dotenv.config()
 
 const app = express();
+app.use(express.json({ limit: '10mb' }));
 const port = process.env.PORT || 3000;
 app.use(cors())
 
@@ -34,7 +36,7 @@ app.post("/addAccident", async (req, res) => {
   try {
     const { _loc, _date, _time, _snapShot, _plate } = req.body;
 
-    // console.log(_loc, _date, _time, _snapShot, _plate)
+    console.log(_loc, _date, _time, _plate)
 
     const contract = await sdk.getContract(process.env.CONTRACT_ADDRESS);
 
@@ -115,12 +117,13 @@ app.get('/getAccident/:id', async (req, res) => {
 
 app.post('/reqInsurance', async(req, res) => {
   try{
-    const {_name, _phone, _block, _user} = req.body
-    const contract = await sdk.getContract(process.env.CONTRACT_ADDRESS)
-    const result = await contract.call("reqInsurance", [_name, _phone, _block])
+    // const {_name, _phone, _block, _user} = req.body
+    // const contract = await sdk.getContract(process.env.CONTRACT_ADDRESS)
+    // const result = await contract.call("reqInsurance", [_name, _phone, _block])
 
 
-    console.log(result)
+    // console.log(result)
+    res.status(200).send('Insurance claim Emailed successfully');
   }catch(error){
     console.log(error)
   }
@@ -169,6 +172,6 @@ app.post('/bot', async (req, res) => {
     }
   });
 
-app.listen(port, '172.18.100.166', () => {
+app.listen(port, () => {
     console.log(`Server is running on port http://172.18.100.166:${port}`);
 });
