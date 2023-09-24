@@ -34,7 +34,7 @@ function ChatApp() {
         // Add the user's message to the state first
         setMessages(updatedMessages);
     
-        const apiUrl = 'http://172.18.100.166:3000/bot';
+        const apiUrl = 'http://localhost:3000/bot';
     
         const response = await fetch(apiUrl, {
           method: 'POST',
