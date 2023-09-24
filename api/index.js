@@ -178,7 +178,7 @@ app.post('/bot', async (req, res) => {
       const prompt =`"Hello, I need legal assistance related to the Indian Penal Code (IPC) and other Indian laws. My problem is ${userMessage}. Can you provide me with guidance or information on how to approach this situation within the boundaries of Indian law?"`
       const completion = await openai.createCompletion({
         model: "text-davinci-003",
-        prompt: userMessage, 
+        prompt: prompt, 
         temperature: 0,
         max_tokens: 2048,
       });
@@ -205,5 +205,5 @@ app.post('/bot', async (req, res) => {
   })
 
 app.listen(port, () => {
-    console.log(`Server is running on port http://172.18.100.166:${port}`);
+    console.log(`Server is running on port 3000`);
 });
