@@ -34,7 +34,7 @@ function ChatApp() {
         // Add the user's message to the state first
         setMessages(updatedMessages);
     
-        const apiUrl = 'http://localhost:3000/bot';
+        const apiUrl = 'https://hackcdent-891d0b31e96e.herokuapp.com/bot';
     
         const response = await fetch(apiUrl, {
           method: 'POST',

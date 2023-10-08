@@ -8,7 +8,7 @@ function ViewAccident() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const apiUrl = 'http://localhost:3000/getAccidents'
+        const apiUrl = 'https://hackcdent-891d0b31e96e.herokuapp.com/getAccidents'
         const res = await axios.get(apiUrl)
         if(res){
           setAcc(res.data.result);
